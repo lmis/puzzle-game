@@ -1,20 +1,7 @@
-"use client";
-
 import React, { FC } from "react";
 
-import { TextDisplay } from "@/client/components/widgets/TextDisplay";
-
-interface Props {
-  onClose?: () => void;
-}
-
-export const Prologue: FC<Props> = ({ onClose }) => (
-  <TextDisplay
-    onAccept={onClose}
-    ariaLabel="einleitung-schließen"
-    title="Westberlin, September 1986"
-    confirmText="Spiel starten"
-  >
+export const Prologue: FC = () => (
+  <>
     <p>
       Ihr erreicht das Safehouse in den frühen Morgenstunden. Westberlin ist
       grau verhangen, die Straßen riechen nach kaltem Regen und Auspuff. Der
@@ -26,21 +13,22 @@ export const Prologue: FC<Props> = ({ onClose }) => (
       Koffer, das Herzstück dieser Geschichte.
     </p>
     <p>
-      Er faßt euch ins Bild. Am 12. September 1986 meldete sich der Maulwurf
-      &laquo;Schwungrad&raquo; das letzte Mal mit klaren Worten. Er sei
-      enttarnt, die alten Codes nicht mehr sicher. Am 14. September legte er den
-      Koffer ab – im Lichtenberger Bahnhof, Ostberlin, voller Kassetten und
-      einem präparierten KC85/3 und verschwand danach Spurlos. Kein
-      Lebesnzeichen, keine Verhaftung, keine Leiche, nur Stille.
+      Er fasst euch ins Bild. Am 12. September 1986 meldete sich der Maulwurf
+      &laquo;Schwungrad&raquo; das letzte Mal mit klaren Worten. Er habe etwas
+      Brisantes aufgedeckt, doch er befürchtet, bald enttarnt zu werden. Am 14.
+      September legte er den Koffer ab &ndash; im Lichtenberger Bahnhof,
+      Ostberlin, voller Kassetten und einem präparierten KC85/3 und verschwand
+      danach spurlos. Kein Lebenszeichen, keine Verhaftung, keine Leiche, nur
+      Stille.
     </p>
     <p>
       Am 19. gelang es &laquo;Blaukraut&raquo;, den Koffer über die Grenze zu
       bringen. Seitdem hockt er hier, abgeschirmt in einem Faraday-Käfig, kämpft
       gegen einen Code, den niemand kennt. &laquo;Schwungrad&raquo; hat seine
-      letzten Erkenntnisse verschlüsselt – aber nach seiner eigenen Logik.
+      letzten Erkenntnisse verschlüsselt &ndash; aber nach seiner eigenen Logik.
     </p>
     <p>
-      &ldquo;Ich hab&apos; das Ding zum laufen gekriegt, aber das einzige
+      &ldquo;Ich hab&apos; das Ding zum Laufen gekriegt, aber das einzige
       Programm ist ein kaputtes Kinderspiel.&rdquo; &laquo;Blaukraut&raquo;
       schüttelt den Kopf. &ldquo;Da muss mehr dahinterstecken.
       &laquo;Schwungrad&raquo; war kein Spinner!&rdquo;
@@ -48,8 +36,8 @@ export const Prologue: FC<Props> = ({ onClose }) => (
     <p className="pt-2">
       Nun seid ihr hier, weil ihr die Einzigen seid, die diesem Rätsel Leben
       einhauchen können. Eure Aufgabe: das letzte Werk eines Mannes
-      dechiffrieren, der vielleicht schon längst tot ist – und dabei die
+      dechiffrieren, der vielleicht schon längst tot ist &ndash; und dabei die
       Schatten nicht aus den Augen verlieren, die schon in den Straßen warten.
     </p>
-  </TextDisplay>
+  </>
 );

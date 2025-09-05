@@ -1,64 +1,62 @@
+"use client";
+
 import React, { FC } from "react";
 
+import clsx from "clsx";
+
 import { NavButton } from "@/client/components/nav/NavButton";
+import { useGameState } from "@/client/state/game-state";
+import { useTerminalState } from "@/client/state/terminal-state";
 import { GameLocation } from "@/domain-model";
 
 interface Props {
-  gameLocation: GameLocation;
-  onNavigation: (location: GameLocation) => void;
-  onBack: () => void;
+  className: string;
 }
 
-export const NavBar: FC<Props> = ({ gameLocation, onNavigation, onBack }) => {
+export const NavBar: FC<Props> = ({ className }) => {
+  const { scroll } = useTerminalState();
+  const { back, navigate, gameLocation } = useGameState();
+  const showHelp = ![
+    GameLocation.NONE,
+    GameLocation.HELP,
+    GameLocation.LEGAL_NOTICE,
+    GameLocation.GAME_RULES,
+    GameLocation.HEALTH_WARNING_AND_PRIVACY,
+    GameLocation.PROLOGUE,
+  ].includes(gameLocation);
   return (
-    <div className="absolute top-4 right-4 z-40 flex flex-col items-center justify-center gap-4">
-      {gameLocation !== GameLocation.HELP && (
+    <div
+      className={clsx(
+        "flex flex-col items-center justify-center gap-4",
+        className,
+      )}
+    >
+      {showHelp && (
         <NavButton
           label="hilfe"
-          onClick={() => onNavigation(GameLocation.HELP)}
+          onClick={() => navigate(GameLocation.HELP)}
           symbol="?"
         />
       )}
-      {gameLocation !== GameLocation.INTRODUCTION && (
-        <div className="flex flex-col items-center justify-center gap-4 lg:hidden">
-          {gameLocation !== GameLocation.ASHTRAY && (
-            <NavButton
-              label="ashenbecher"
-              onClick={() => onNavigation(GameLocation.ASHTRAY)}
-              symbol="🚬"
-            />
-          )}
-          {gameLocation !== GameLocation.COFFE_CUP && (
-            <NavButton
-              label="kaffeetasse"
-              onClick={() => onNavigation(GameLocation.COFFE_CUP)}
-              symbol="☕"
-            />
-          )}
-          {gameLocation !== GameLocation.TERMINAL && (
-            <NavButton
-              label="computer"
-              onClick={() => onNavigation(GameLocation.TERMINAL)}
-              symbol="💻"
-            />
-          )}
-          {gameLocation !== GameLocation.BRIEFCASE && (
-            <NavButton
-              label="koffer"
-              onClick={() => onNavigation(GameLocation.BRIEFCASE)}
-              symbol="💼"
-            />
-          )}
-          {gameLocation !== GameLocation.ROOM && (
-            <NavButton
-              label="raum"
-              onClick={() => onNavigation(GameLocation.ROOM)}
-              symbol="🏠"
-            />
-          )}
-        </div>
+      {gameLocation !== GameLocation.HEALTH_WARNING_AND_PRIVACY && (
+        <NavButton label="zurück" onClick={back} symbol="⬅" />
       )}
-      <NavButton label="zurück" onClick={onBack} symbol="<" />
+      {gameLocation === GameLocation.TERMINAL && (
+        <>
+          <NavButton
+            label="nach-oben"
+            onClick={() => scroll(-5)}
+            symbol="⬆"
+            holdable
+          />
+          <NavButton
+            label="nach-unten"
+            onClick={() => scroll(5)}
+            symbol="⬇"
+            holdable
+          />
+        </>
+      )}
     </div>
   );
 };

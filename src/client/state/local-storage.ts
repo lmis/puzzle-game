@@ -16,7 +16,3 @@ export const getSkipIntro = () => {
 export const setSkipIntro = () => {
   localStorage.setItem(SKIP_INTRO, "true");
 };
-
-export const clearStorage = () => {
-  localStorage.clear();
-};

@@ -74,19 +74,11 @@
       0 0 2px #00ff66,
       0 0 10px #00ff66;
   }
-  .shadow-gray-glow-solid-black {
-    box-shadow:
-      0 0 32px 8px rgba(180, 180, 180, 0.18),
-      0 0 0 12px rgba(0, 0, 0, 0.7);
-  }
 
   .shadow-cyan-glow {
     box-shadow:
       0 0 20px 8px #00f6ff,
       0 0 40px 16px #00f6ff55;
-    transition:
-      box-shadow 0.2s,
-      transform 0.2s;
   }
   .shadow-cyan-glow:hover {
     box-shadow:

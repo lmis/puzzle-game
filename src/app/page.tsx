@@ -1,11 +1,11 @@
 import { Game } from "@/client/components/Game";
 import { MobileNotice } from "@/client/components/notices/MobileNotice";
 
-export default async function Page() {
-  return (
-    <main className="flex h-screen w-screen flex-col overflow-hidden">
-      <MobileNotice />
-      <Game />
-    </main>
-  );
-}
+const Page = async () => (
+  <main className="h-screen w-screen overflow-hidden">
+    <MobileNotice />
+    <Game />
+  </main>
+);
+
+export default Page;

@@ -1,28 +1,14 @@
 import { CONGRATULATIONS_KEY, TerminalItem } from "@/domain-model";
-import { RIDDLE_ANSWERS } from "@/server/env";
+import { SECRET_ANSWERS } from "@/server/env";
 
-const limitLineWidth = (item: string) => {
-  return item
-    .split("\n")
-    .map((line) => {
-      const [first, ...rest] = line.split(" ");
-      let res = first;
-      let count = first.length;
-      for (const word of rest) {
-        if (count + word.length < 60) {
-          res += " " + word;
-          count += word.length + 1;
-        } else {
-          res += "\n" + word;
-          count = word.length;
-        }
-      }
-      return res;
-    })
-    .join("\n");
-};
+const trivialAnswers = [
+  ["biene", "die biene", "bienen", "die bienen"],
+  ["photosynthese", "die photosynthese", "die fotosynthese", "fotosynthese"],
+];
+// Putting these into the env variables, so you cannot get them from GitHub.
+const secretAnswers = JSON.parse(SECRET_ANSWERS) as [string][];
+const answers = [...trivialAnswers, ...secretAnswers];
 
-const answers = JSON.parse(RIDDLE_ANSWERS) as string[];
 const questions: string[] = [
   `Entdecke die Natur - spielend Lernen!
 Komm mit auf einen Spaziergang durch den Wald und lerne wie Pflanzen von Blaukraut bis Minze wachsen, warum Wasser im Kreislauf bleibt und weshalb selbst das kleinste Schwungrad der Natur wichtig ist, damit alles im Gleichgewicht bleibt.
@@ -34,47 +20,56 @@ Nächste Frage:
 Wie nennt man den Vorgang, bei dem Pflanzen aus Wasser, Kohlendi0x52id und Sonnenlicht ihre eigene Nahrung herstellen?`,
   `Toll! Photosynthese ist richtig.
 Weiter geht's:
-[Err: 41 55 54]
-...Trace: b32(394) b32(494)?
-...Sorted -D
-...COBs: 'ja' = ???????
-...CPU-Info: X=80, Y=28, Z=6 
+[Fehler: 41 55 54]
+...b32(394) b32(494)?
+...Typenbezeichnung[0]: COBS Prepend 'ja'
+...Typenbezeichnung[1]= ??ö????
+...Mikroprocessor-Info: X=80, Y=28, Z=6 
 `,
-  `Fehlerzustand: Kassete 2 defekt. Spule zurück zur Ausgangslage...
+  `Fehlerzustand: Kassette 2 defekt. Spule automatisch zurück zur Ausgangslage...
 ...
-Sehr gut. Die Kassete 2 ist wieder da wo sie war. Von diesem Punkt aus, kanns weitergehen.
+Sehr gut. Die Kassette 2 ist wieder da, wo sie Anfangs war. Von diesem Punkt aus kann's weitergehen.
 ...
-Fehler: Benötige Eingabe 44.
-...Trace: 
-(+1,-1) -> (-2,+2) -> (+3, -2) -> (-4, +3) -> (+2, +0)
+[Fehler: Benötige Eingabe 44]
+...Ablaufprotokoll:
+(+1,+1) -> (-2,-2) -> (+3, +2) -> (-4, -3) -> (+2, +0)
++➡➡➡➡➡➡➡➡➡➡➡➡➡➡➡➡➡➡➡➡+
+⬇52|YY|F6|MB|RR|AS|44⬇
 +--+--+--+--+--+--+--+
-|QX|YY|F6|MB|RR|AS|UJ|
+⬇80|28|NI|PK| K|WO|OL⬇
 +--+--+--+--+--+--+--+
-|BK|PP|NI|PK| K|WO|OL|
+⬇KB|Z6|UQ|TE|TS|RT|RT⬇
 +--+--+--+--+--+--+--+
-|KB|PP|UQ|TE|TS|RT|RT|
+⬇RA|RO|RU|RE|WE|SU|LL⬇
 +--+--+--+--+--+--+--+
-|RA|RO|RU|RE|WE|SU|LL|
-+--+--+--+--+--+--+--+
-|KK|PO|PU|PI|PL|ST|CH|
-+--+--+--+--+--+--+--+
+⬇K2|PO|PU|PI|PL|ST|CH⬇
++➡➡➡➡➡➡➡➡➡➡➡➡➡➡➡➡➡➡➡➡+
 `,
-  `Insekten sehen andere Spektren des Lichtes als wir Menschen. Was für uns rot aussieht, kann für eine Biene ganz anders aussehen. Was sehen Bienen, wenn wir rot sehen?
-N) Hz jrvgre
-O) Mh xbzzra
-P) Nagjbegr
-Q) Zvg zrvarz
-R) Yvrofgra
-S) Unaqryfthg`,
-  `[WARNUNG: iAPX überhitzt!]
-Ubssragyvpu fvaq jve hagre haf, Oynhxenhg. Vpu xbaagr qvr Cebgbxbyyr üore qvr Xähsr qre Fpurvasvezra svaqra, nore vpu tynhor, zna ung jnf orzrexg. Abpu unora fvr zvpu avpug vz Ivfvre, nore vpu mrefgöer zrvar Nofpuevsgra haq Nhsmrvpuhatra haq uvagreyrtr fvr uvre va ubssragyvpu hafpurvaonere Sbez. Snyyf vpu zvg qrz Erpuare natrunygra jreqr, ubssr vpu zrva unezybfrf, xnchggrf Xvaqrefcvry jveq avpug jrvgre ornpugrg. Vpu gnhpur vz Fnsrubhfr nz Qäznevgmfrr hagre ovf vue zvpu ubyra xöaag - Fpujhatenq.
+  `Nicht nur Insekten, sondern auch Arrachnoide sind wichtig für die Natur. Sie fangen Schädlinge und halten das ökologische Gleichgewicht langjährig im Feld. Wie sagt man Umgangssprachlich zu ihnen?
+N) Nagjbegr
+O) Zve zvg 
+P) Rgjnf, qnff
+Q) Evpugvt ivryr qrvare
+R) Vagreangvbanyra
+S) Xhzcryf zötra.
+T) Nore 
+U) Avpug qra
+V) Rkgenoervgra!
+W) Enssfg qh'f?
+`,
+  `Sehr gut! Spinne ist richtig.
+[Fehler: 0xF6 Dies ist kein Originalgerät. ModifiKatIon erkannt. Es verstößt gegen die Geschäftsbedingungen, Fremdteile einzubauen. B(r|l)aut?k(leid|raut)]
+Teile die Typennummer des unzugelassenen Geräts mit:
+`,
+  `[WARNUNG: Rechenbaustein überhitzt!]
+Ubssragyvpu fvaq jve hagre haf, Oynhxenhg. Vpu xbaagr qvr Cebgbxbyyr üore qvr Xähsr qre Fpurvasvezra svaqra, nore vpu tynhor, zna ung jnf orzrexg. Abpu unora fvr zvpu avpug vz Ivfvre, nore vpu mrefgöer zrvar Nofpuevsgra haq Nhsmrvpuahatra haq uvagreyrtr fvr uvre va ubssragyvpu hafpurvaonere Sbez. Snyyf vpu zvg qrz Erpuare natrunygra jreqr, ubssr vpu, zrva unezybfrf, xnchggrf Xvaqrefcvry jveq avpug jrvgre ornpugrg. Vpu gnhpur vz Fnsrubhfr nz Qäzrevgmfrr hagre ovf vue zvpu ubyra xöaag - Fpujhatenq.
 AbeqGrpu, Bfyb. "Ynobegrpuavx" = Jvapurfgre-Cynggra, 30ZO. Rzcsäatre: IRO Zvxebryrxgebavx Resheg.
 FjvffPbzc NT, Müevpu. "Oüebznfpuvara" = RCEBZ-Cebtenzzvrere. Rzcsäatre ZsF, Nog. 82/7, Ucg. 4.
-Genaf-Vzcbeg TzoU, Unzohet. "Zrqvmvavfpur Treägr" = Vagry KLM + ENZ. Ebhgr: Jvra -> Cent. Rzcsäatre bsvmvryy Xloreargvx Vafgvghg. Erny: MSG Qerfqra
+Genaf-Vzcbeg TzoU, Unzohet. "Zrqvmvavfpur Treägr" = Vagry KLM + ENZ. Ebhgr: Jvra -> Cent. Rzcsäatre bssvmvryy Xloreargvx Vafgvghg. Erny: MSG Qerfqra
 RhebQngn, Tras. "Grfgtreägr" = "Zbgbenyn ZP68000". Rzcsäatre: IRO Ebobgeba Ryrxgebavx Evrfn.
 ... Typennummer iAPX: ?????
 `,
-].map((item) => limitLineWidth(item));
+];
 
 export const getNextQuestionOrCongratulations = (key: number): TerminalItem => {
   return questions[key]
@@ -84,9 +79,8 @@ export const getNextQuestionOrCongratulations = (key: number): TerminalItem => {
       }
     : {
         key: CONGRATULATIONS_KEY,
-        content: limitLineWidth(
-          "Damit hast du das Spiel gewonnen! So viel gelernt über fleißige Bienen und die Wege kreuz und queer durch die Welt, die sie gehen, um an Nektar zu kommen!",
-        ),
+        content:
+          "Damit habt ihr das Spiel gewonnen und so viel gelernt über fleißige Bienen und die Wege - kreuz und quer durch die Welt -, die sie gehen, um an Nektar zu kommen!",
       };
 };
 
@@ -95,12 +89,14 @@ export const getAnsweredQuestions = (maxKey: number) => {
   for (let k = 0; k < maxKey; k++) {
     items.push(
       { key: `riddle-${k}`, content: questions[k] },
-      { key: `answer-${k}`, content: answers[k], input: true },
+      { key: `answer-${k}`, content: answers[k][0], input: true },
     );
   }
   return items;
 };
 
-export const check = (key: number, answer: string): boolean => {
-  return answers[key].toLowerCase().trim() === answer.toLowerCase().trim();
-};
+export const check = (key: number, input: string): boolean =>
+  answers[key].some((answer) => matches(answer, input));
+
+const matches = (answer: string, input: string) =>
+  input.toLowerCase().trim() === answer.toLowerCase().trim();

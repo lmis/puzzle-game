@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
 import "./globals.css";
@@ -14,22 +14,27 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Schwungrad's Maschine",
+  title: "Schwungrad",
   description: "Interaktives Rätselspiel",
+  robots: "noindex, nofollow",
 };
 
-export default function RootLayout({
+export const viewport: Viewport = {
+  width: "device-width",
+  height: "device-height",
+  initialScale: 1,
+};
+
+const RootLayout = ({
   children,
 }: Readonly<{
   children: React.ReactNode;
-}>) {
-  return (
-    <html lang="de">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-      </body>
-    </html>
-  );
-}
+}>) => (
+  <html lang="de">
+    <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      {children}
+    </body>
+  </html>
+);
+
+export default RootLayout;

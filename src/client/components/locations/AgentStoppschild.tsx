@@ -7,21 +7,26 @@ import { TextDisplay } from "@/client/components/widgets/TextDisplay";
 import { useGameState } from "@/client/state/game-state";
 import { GameLocation } from "@/domain-model";
 
-export const CoffeeCup: FC = () => {
+export const AgentStoppschild: FC = () => {
   const { back } = useGameState();
   return (
-    <LocationContainer name="Kaffeetasse" gameLocation={GameLocation.COFFE_CUP}>
+    <LocationContainer
+      name="Agent Kaffekrug"
+      gameLocation={GameLocation.AGENT_STOPPSCHILD}
+    >
       <TextDisplay
         onConfirm={back}
         ariaLabel="zurück"
-        title="Kaffeetasse"
+        title="Agent Stoppschild"
         confirmText="Zurück"
       >
         <p>
-          &laquo;Blaukraut&raquo; scheint schon ganze Nächte vor diesem Rechner
-          zu sitzen, wenn man den Zustand seiner Kaffeetasse betrachtet, auch
-          die Melitta in der kleinen Küche ist schon fast leer. Mal sehen, was
-          die Firma spendiert hat: Dallmayr oder Jacobs Krönung?
+          &laquo;Stoppschild&raquo; hat langjährige Erfahrung im Feld,
+          insbesondere dort, wo es brenzlig wird.
+        </p>
+        <p>
+          Er und &laquo;Brautkleid&raquo; sind ein eingespieltes Team, das sich
+          blind vertraut und aufeinander verlassen kann.
         </p>
       </TextDisplay>
     </LocationContainer>

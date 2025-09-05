@@ -11,12 +11,18 @@ export type RiddleResult =
 export enum GameLocation {
   NONE,
   TERMINAL,
-  ROOM,
-  INTRODUCTION,
+  SAFEHOUSE,
+  AGENTS,
+  HEALTH_WARNING_AND_PRIVACY,
+  LEGAL_NOTICE,
+  PROLOGUE,
+  GAME_RULES,
   HELP,
   ASHTRAY,
   COFFE_CUP,
   BRIEFCASE,
+  AGENT_BRAUTKLEID,
+  AGENT_STOPPSCHILD,
 }
 
 export type TerminalItem = {

@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 
-import cn from "classnames";
+import clsx from "clsx";
 
 interface Props {
   onClick: () => void;
@@ -9,8 +9,8 @@ interface Props {
 
 export const MagnifyingGlass: FC<Props> = ({ onClick, className }) => (
   <div
-    className={cn(
-      "absolute size-9 rounded-full bg-transparent border-2 border-cyan-300 shadow-cyan-glow hover:shadow-cyan-glow-hover cursor-pointer transition-shadow scale-100 hover:scale-110",
+    className={clsx(
+      "shadow-cyan-glow hover:shadow-cyan-glow-hover size-9 scale-100 cursor-pointer rounded-full border-2 border-cyan-300 bg-transparent transition-all duration-300 hover:scale-110",
       className,
     )}
     onClick={onClick}

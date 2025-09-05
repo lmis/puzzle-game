@@ -1,22 +1,9 @@
-"use client";
-
 import React, { FC } from "react";
 
-import { TextDisplay } from "@/client/components/widgets/TextDisplay";
-
-interface Props {
-  onClose?: () => void;
-}
-
-export const LegalNotice: FC<Props> = ({ onClose }) => (
-  <TextDisplay
-    onAccept={onClose}
-    ariaLabel="impressum-und-datenschutz-schließen"
-    title="Impressum & Datenschutz"
-    confirmText="Schließen"
-  >
+export const LegalNotice: FC = () => (
+  <>
     <p>
-      Dieses Spiel setzt keine cookies und benutzt keine third party cookies.
+      Dieses Spiel setzt keine Cookies und benutzt keine Third Party Cookies.
       Alle Spieldaten werden lokal gespeichert.
     </p>
     <p>
@@ -24,5 +11,9 @@ export const LegalNotice: FC<Props> = ({ onClose }) => (
       dein Gerät wie IP-Adresse oder User-Agent zu Audit- und Sicherheitszwecken
       protokollieren.
     </p>
-  </TextDisplay>
+    <p>Seite erstellt von Lionel Miserez. </p>
+    <p>
+      <a href="mailto:puzzle@miserez-l.io">puzzle@miserez-l.io</a>
+    </p>
+  </>
 );

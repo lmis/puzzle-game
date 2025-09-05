@@ -2,96 +2,78 @@
 
 import React, { FC, useEffect, useState } from "react";
 
-import cn from "classnames";
-
-import { Location } from "@/client/components/locations/Location";
+import { Locations } from "@/client/components/locations/Locations";
 import { NavBar } from "@/client/components/nav/NavBar";
+import { getLocationImageUrl } from "@/client/location-images";
+import { useGameState } from "@/client/state/game-state";
 import { getGameStateToken, getSkipIntro } from "@/client/state/local-storage";
 import { useTerminalState } from "@/client/state/terminal-state";
 import { GameLocation } from "@/domain-model";
-import { inexhaustive } from "@/lib/enum";
 import { loadInitialTerminalItems } from "@/server/actions/load-terminal-items";
 
 export const Game: FC = () => {
-  const [gameLocations, setGameLocations] = useState<GameLocation[]>([]);
-  const { enqueue } = useTerminalState();
+  const { gameLocation, navigate } = useGameState();
+  const { enqueue, setSkipAnimation } = useTerminalState();
+  const [displayedImageUrl, setDisplayedImageUrl] = useState(
+    getLocationImageUrl(gameLocation),
+  );
 
   useEffect(() => {
-    if (gameLocations.length === 0) {
-      setGameLocations([
-        getSkipIntro() ? GameLocation.ROOM : GameLocation.INTRODUCTION,
-      ]);
+    if (gameLocation === GameLocation.NONE) {
+      navigate(
+        getSkipIntro()
+          ? GameLocation.SAFEHOUSE
+          : GameLocation.HEALTH_WARNING_AND_PRIVACY,
+      );
     }
-  }, [gameLocations, setGameLocations]);
+  }, [navigate, gameLocation]);
 
   useEffect(() => {
-    loadInitialTerminalItems(getGameStateToken()).then((items) =>
-      enqueue(items),
-    );
-  }, [enqueue]);
+    const gameStateToken = getGameStateToken();
+    loadInitialTerminalItems(gameStateToken).then((items) => enqueue(items));
+    if (gameStateToken) {
+      setSkipAnimation(true);
+    }
+  }, [enqueue, setSkipAnimation]);
 
   useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "F6") {
+        alert(
+          "Gute Idee, aber nicht nötig. Das Spiel benötigt keine speziellen Tasten - Eintippen im mysteriösen Terminal reicht völlig aus. :)",
+        );
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
     console.log(
       "%cHier müsst ihr nichts suchen. Alles was ihr braucht ist durch normales Interagieren mit dem Spiel erreichbar.",
       "font-size: 1rem; font-weight: bold;",
     );
-  });
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
-  const gameLocation =
-    gameLocations[gameLocations.length - 1] ?? GameLocation.NONE;
-  const onNavigation = (location: GameLocation) => {
-    setGameLocations((prev) => [...prev, location]);
-  };
-  const onBack = () => {
-    setGameLocations((prev) => (prev.length > 1 ? prev.slice(0, -1) : prev));
-  };
+  useEffect(() => {
+    const newUrl = getLocationImageUrl(gameLocation);
+    if (newUrl === displayedImageUrl) {
+      return;
+    }
+
+    const img = new window.Image();
+    img.src = newUrl;
+    img.onload = () => setDisplayedImageUrl(newUrl);
+  }, [gameLocation, displayedImageUrl]);
 
   return (
-    <div className="relative flex size-full items-center justify-center">
+    <div className="flex size-full items-center justify-center">
       <div className="absolute inset-0 -z-40 bg-black" />
       <div
-        className={cn(
-          "absolute inset-0 -z-40 bg-cover bg-center bg-no-repeat blur-[100px]",
-          getLocationBgClass(gameLocation),
-        )}
+        className="absolute inset-0 -z-40 bg-cover bg-center bg-no-repeat blur-[100px] transition-all duration-1200"
+        style={{
+          backgroundImage: `url(${displayedImageUrl})`,
+        }}
       />
-      <div
-        className={cn(
-          "absolute size-full -z-40 bg-auto opacity-100 transition-all duration-200 bg-no-repeat bg-center",
-          getLocationBgClass(gameLocation),
-        )}
-      />
-      <NavBar
-        gameLocation={gameLocation}
-        onNavigation={onNavigation}
-        onBack={onBack}
-      />
-      <Location
-        gameLocation={gameLocation}
-        onNavigation={onNavigation}
-        onBack={onBack}
-      />
+      <NavBar className="absolute top-8 right-8 z-40" />
+      <Locations />
     </div>
   );
-};
-
-const getLocationBgClass = (location: GameLocation) => {
-  switch (location) {
-    case GameLocation.ASHTRAY:
-      return "bg-[url(/ashtray.png)]";
-    case GameLocation.COFFE_CUP:
-      return "bg-[url(/coffee-cup.png)]";
-    case GameLocation.BRIEFCASE:
-      return "bg-[url(/briefcase.png)]";
-    case GameLocation.TERMINAL:
-      return "bg-[url(/terminal.png)]";
-    case GameLocation.HELP:
-      return "bg-[url(/wall.png)]";
-    case GameLocation.INTRODUCTION:
-    case GameLocation.ROOM:
-    case GameLocation.NONE:
-      return "bg-[url(/room.png)]";
-    default:
-      return inexhaustive(location);
-  }
 };

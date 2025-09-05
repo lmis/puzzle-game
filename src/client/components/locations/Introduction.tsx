@@ -1,71 +1,74 @@
 "use client";
 
-import React, { FC, useState } from "react";
+import React, { FC } from "react";
 
 import { GameRules } from "@/client/components/notices/GameRule";
+import { HealthWarningAndPrivacy } from "@/client/components/notices/HealthWarningAndPrivacy";
 import { LegalNotice } from "@/client/components/notices/LegalNotice";
 import { Prologue } from "@/client/components/notices/Prologue";
+import { LocationContainer } from "@/client/components/widgets/LocationContainer";
 import { TextDisplay } from "@/client/components/widgets/TextDisplay";
+import { useGameState } from "@/client/state/game-state";
 import { setSkipIntro } from "@/client/state/local-storage";
+import { GameLocation } from "@/domain-model";
 
-interface Props {
-  onClose: () => void;
-}
+export const Introduction: FC = () => {
+  const { back, navigate } = useGameState();
 
-enum IntroductionStep {
-  WARNING,
-  LEGAL_NOTICE,
-  GAME_RULES,
-  PROLOGUE,
-}
-
-export const Introduction: FC<Props> = ({ onClose }) => {
-  const [step, setStep] = useState(IntroductionStep.WARNING);
-
-  switch (step) {
-    case IntroductionStep.WARNING:
-      return (
+  return (
+    <>
+      <LocationContainer
+        name="Gesundheits und Datenschutzhinweid"
+        gameLocation={GameLocation.HEALTH_WARNING_AND_PRIVACY}
+      >
         <TextDisplay
-          onAccept={() => setStep(IntroductionStep.GAME_RULES)}
+          onConfirm={() => navigate(GameLocation.GAME_RULES)}
           ariaLabel="gesundheitshinweis-und-datenschutz-akzeptieren"
           title="Gesundheits und Datenschutzhinweis"
           confirmText="Akzeptieren"
         >
-          <p className="font-bold">
-            Warnung: Dieses Spiel enthält Bewegungsgrafiken und flackernde
-            Lichter.
-          </p>
-
-          <p>
-            Mit Klicken auf &laquo;Akzeptieren&raquo; bestätigst du, dass du
-            Gesundheitshinweis und die
-            <a
-              href="#"
-              className="px-2 text-cyan-400 underline hover:text-cyan-300 focus:text-cyan-300"
-              aria-label="datenschutzerklärung-lesen"
-              onClick={(e) => {
-                e.preventDefault();
-                setStep(IntroductionStep.LEGAL_NOTICE);
-              }}
-            >
-              Impressum & Datenschutzerklärung
-            </a>
-            gelesen und verstanden hast und akzeptierst.
-          </p>
+          <HealthWarningAndPrivacy />
         </TextDisplay>
-      );
-    case IntroductionStep.LEGAL_NOTICE:
-      return <LegalNotice onClose={() => setStep(IntroductionStep.WARNING)} />;
-    case IntroductionStep.GAME_RULES:
-      return <GameRules onClose={() => setStep(IntroductionStep.PROLOGUE)} />;
-    case IntroductionStep.PROLOGUE:
-      return (
-        <Prologue
-          onClose={() => {
+      </LocationContainer>
+      <LocationContainer
+        name="Rechtliches"
+        gameLocation={GameLocation.LEGAL_NOTICE}
+      >
+        <TextDisplay
+          onConfirm={back}
+          ariaLabel="rechtliches-schließen"
+          title="Rechtliches"
+          confirmText="Schließen"
+        >
+          <LegalNotice />
+        </TextDisplay>
+      </LocationContainer>
+      <LocationContainer
+        name="Spielregeln"
+        gameLocation={GameLocation.GAME_RULES}
+      >
+        <TextDisplay
+          onConfirm={() => navigate(GameLocation.PROLOGUE)}
+          ariaLabel="Spielregeln-verstanden"
+          title="Spielregeln"
+          confirmText="Verstanden"
+        >
+          <GameRules />
+        </TextDisplay>
+      </LocationContainer>
+      <LocationContainer name="Einleitung" gameLocation={GameLocation.PROLOGUE}>
+        <TextDisplay
+          onConfirm={() => {
             setSkipIntro();
-            onClose();
+            navigate(GameLocation.SAFEHOUSE);
           }}
-        />
-      );
-  }
+          ariaLabel="einleitung-schließen"
+          title="Westberlin, September 1986"
+          confirmText="Spiel starten"
+        >
+          <Prologue />
+        </TextDisplay>
+      </LocationContainer>
+    </>
+  );
 };
